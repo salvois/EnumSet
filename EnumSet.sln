@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumSet", "EnumSet\EnumSet.csproj", "{35097CF9-813F-4A40-B90F-579CE06E8771}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumSet.Tests", "EnumSet.Tests\EnumSet.Tests.csproj", "{2EAC2CE0-AA8B-4AD8-8773-40EAF443227B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35097CF9-813F-4A40-B90F-579CE06E8771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35097CF9-813F-4A40-B90F-579CE06E8771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35097CF9-813F-4A40-B90F-579CE06E8771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35097CF9-813F-4A40-B90F-579CE06E8771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EAC2CE0-AA8B-4AD8-8773-40EAF443227B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EAC2CE0-AA8B-4AD8-8773-40EAF443227B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EAC2CE0-AA8B-4AD8-8773-40EAF443227B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EAC2CE0-AA8B-4AD8-8773-40EAF443227B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {37FDA124-B796-4CD4-A2B9-E43743D6DA15}
+	EndGlobalSection
+EndGlobal
