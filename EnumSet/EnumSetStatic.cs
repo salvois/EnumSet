@@ -51,7 +51,11 @@ public static class EnumSet
     public static EnumSet<T> Of<T>(IEnumerable<T> values) where T : Enum =>
         values is IReadOnlyList<T> list
             ? FromList(list)
-            : new EnumSet<T>(values.Aggregate(0u, (current, value) => current | ToFlag<T>(value)));
+            : new EnumSet<T>(values.Aggregate(0u, (current, value) => current | ToFlag(value)));
+
+    /// Creates an EnumSet from the specified IEnumerable, fluently
+    public static EnumSet<T> ToEnumSet<T>(this IEnumerable<T> values) where T : Enum =>
+        Of(values);
 
     /// Returns true if this EnumSet contains any value
     public static bool Any<T>(this EnumSet<T> enumSet) where T : Enum =>

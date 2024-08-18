@@ -15,6 +15,8 @@ The actual collectin is provided by the `EnumSet<T>` class, which implements `IR
 
 It is a readonly record struct containing a single `uint Flags` property, which represents the combination of enum values stored in the collection as flags, and is not meant to be used directly. The `Flags` property is public to ease testing and get equality for free thanks to records.
 
+**Note:** since the actual storage is a bit field containing 32 bits (the `uint Flags` property), you can store at most 32 different enum values, ranging from 0 to 31. If you try to add a value outside this range, an `ArgumentOutOfRangeException` is thrown.
+
 ```csharp
 public readonly record struct EnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
 {
@@ -68,6 +70,9 @@ public static class EnumSet
 
     /// Creates an EnumSet from the specified IEnumerable
     public static EnumSet<T> Of<T>(IEnumerable<T> values) where T : Enum;
+
+    /// Creates an EnumSet from the specified IEnumerable, fluently
+    public static EnumSet<T> ToEnumSet<T>(this IEnumerable<T> values) where T : Enum;
 
     /// Returns true if this EnumSet contains any value
     public static bool Any<T>(this EnumSet<T> enumSet) where T : Enum;

@@ -68,6 +68,11 @@ public static class EnumSetTest
         EnumSet.Of(Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue)).Flags
             .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
 
+    [Test]
+    public static void ToEnumSet() =>
+        Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue).ToEnumSet().Flags
+            .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
+
     [TestCase(Color.TooSmall)]
     [TestCase(Color.TooBig)]
     public static void Of_OutOfRange(Color color)
