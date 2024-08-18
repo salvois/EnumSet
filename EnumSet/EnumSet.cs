@@ -32,7 +32,33 @@ using System.Numerics;
 
 namespace EnumSet;
 
-/// Immutable, efficient IReadOnlySet for enum values with the memory footprint of 32-bit integer
+/*
+Enum values are stored in a compact way as flags of a bit field backed by a uint.
+Each enum value is used as a bit index, like in the following example:
+
+enum Example { A, B, C, D, E = 13, F = 21, G }
+
++-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+
+|3|3|2|2|2|2|2|2|  |2|2|2|2|1|1|1|1|  |1|1|1|1|1|1|0|0|  | | | | | | | | |
+|1|0|9|8|7|6|5|4|  |3|2|1|0|9|8|7|6|  |5|4|3|2|1|0|9|8|  |7|6|5|4|3|2|1|0|
++-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+
+| | | | | | | | |  | |G|F| | | | | |  | | |E| | | | | |  | | | | |D|C|B|A|
++-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+
+
+Where the corresponding bit is '1' the enum value is present in the set.
+
+For example, when Flags is 1011b (that is 0x0c or 11), the set contains elements D, B and A.
+
+This code uses several bit manipulation idioms that may be less familiar to people writing mostly high-level code:
+  - convert a value to a bit index:  bit = 1 << value
+  - set a bit in a bit field:        flags = flags | bit
+  - clear a bit in a bit field:      flags = flags & ~bit
+  - test if a bit is set:            flags & bit != 0
+*/
+
+/// <summary>Immutable, efficient IReadOnlySet for enum values with the memory footprint of 32-bit integer</summary>
+/// <typeparam name="T">Enum type to store in the set</typeparam>
+/// <param name="Flags">Internal representation of enum values stored in the set</param>
 public readonly record struct EnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
 {
     /// Returns the number elements in this EnumSet

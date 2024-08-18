@@ -33,6 +33,9 @@ namespace EnumSet;
 /// Provides static methods to work with EnumSet<T>
 public static class EnumSet
 {
+    /// The maximum enum value that can be saved in an EnumSet
+    public const int MaxValue = sizeof(int) * 8 - 1;
+
     /// Returns an EnumSet containing no elements
     public static EnumSet<T> Empty<T>() where T : Enum => new(0u);
 
@@ -87,8 +90,13 @@ public static class EnumSet
     }
 
     /// Converts the specified value to a flag
-    internal static uint ToFlag<T>(T value) where T : Enum =>
-        1u << Convert.ToInt32(value);
+    internal static uint ToFlag<T>(T value) where T : Enum
+    {
+        var i = Convert.ToInt32(value);
+        if (i is < 0 or > MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(value));
+        return 1u << i;
+    }
 
     private static EnumSet<T> FromList<T>(IReadOnlyList<T> list) where T : Enum
     {

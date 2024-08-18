@@ -24,6 +24,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -33,11 +34,46 @@ namespace EnumSet.Tests;
 [TestFixture]
 public static class EnumSetTest
 {
-    private enum Color
+    public enum Color
     {
         Red = 0,
         Green = 1,
-        Blue = 2
+        Blue = 2,
+        TooSmall = -1,
+        TooBig = EnumSet.MaxValue + 1
+    }
+
+    [Test]
+    public static void Flags() =>
+        EnumSet.Of(Color.Red, Color.Blue).Flags
+            .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
+
+    [Test]
+    public static void FromFlags() =>
+        new EnumSet<Color>((1 << (int)Color.Red) | (1 << (int)Color.Blue)) // that is 101b = 5
+            .Should().Equal(EnumSet.Of(Color.Red, Color.Blue));
+
+    [Test]
+    public static void Of_Single() =>
+        EnumSet.Of(Color.Blue).Flags
+            .Should().Be(1 << (int)Color.Blue); // that is 10b = 2
+
+    [Test]
+    public static void Of_Params() =>
+        EnumSet.Of(Color.Red, Color.Blue).Flags
+            .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
+
+    [Test]
+    public static void Of_Enumerable() =>
+        EnumSet.Of(Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue)).Flags
+            .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
+
+    [TestCase(Color.TooSmall)]
+    [TestCase(Color.TooBig)]
+    public static void Of_OutOfRange(Color color)
+    {
+        var act = () => EnumSet.Of(color);
+        act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Test]
@@ -55,16 +91,6 @@ public static class EnumSetTest
     [Test]
     public static void Contains_NotContaining() =>
         EnumSet.Of(Color.Red).Contains(Color.Green).Should().BeFalse();
-
-    [Test]
-    public static void FromEnumerable() =>
-        EnumSet.Of(Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue))
-            .Should().Equal(EnumSet.Of(Color.Blue, Color.Red));
-
-    [Test]
-    public static void FromList() =>
-        EnumSet.Of(Color.Red, Color.Blue)
-            .Should().Equal(EnumSet.Of(Color.Blue, Color.Red));
 
     [Test]
     public static void Count() =>
@@ -91,16 +117,6 @@ public static class EnumSetTest
     public static void HashCode() =>
         EnumSet.Of(Color.Red, Color.Green).GetHashCode()
             .Should().Be(EnumSet.Of(Color.Red, Color.Green).GetHashCode());
-
-    [Test]
-    public static void Flags() =>
-        EnumSet.Of(Color.Red, Color.Blue).Flags
-            .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue));
-
-    [Test]
-    public static void FromFlags() =>
-        new EnumSet<Color>((1 << (int)Color.Red) | (1 << (int)Color.Blue))
-            .Should().Equal(EnumSet.Of(Color.Red, Color.Blue));
 
     [Test]
     public static void StringRepresentation() =>
