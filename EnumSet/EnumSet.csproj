@@ -8,9 +8,15 @@
 		<Company>Salvo Isaja</Company>
 		<Copyright>Copyright 2024  Salvatore Isaja</Copyright>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageProjectUrl>https://github.com/salvois/EnumSet</PackageProjectUrl>
 		<Description>Immutable, efficient, small, equatable IReadOnlySet for C# enums</Description>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="../LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+		<None Include="../README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
+	</ItemGroup>
 
 </Project>
