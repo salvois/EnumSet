@@ -1,5 +1,5 @@
 ﻿/*
-EnumSet - Immutable, efficient, small IReadOnlySet for C# enums
+EnumSet - Immutable, efficient, small, equatable IReadOnlySet for C# enums
 
 Copyright 2024 Salvatore ISAJA. All rights reserved.
 

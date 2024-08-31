@@ -9,7 +9,7 @@
 		<Copyright>Copyright 2024  Salvatore Isaja</Copyright>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/salvois/EnumSet</PackageProjectUrl>
-		<Description>Immutable, efficient, small IReadOnlyCollection for C# enums</Description>
+		<Description>Immutable, efficient, small, equatable IReadOnlySet for C# enums</Description>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 

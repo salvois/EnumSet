@@ -1,5 +1,5 @@
 ﻿/*
-EnumSet - Immutable, efficient, small IReadOnlySet for C# enums
+EnumSet - Immutable, efficient, small, equatable IReadOnlySet for C# enums
 
 Copyright 2024 Salvatore ISAJA. All rights reserved.
 
@@ -33,6 +33,9 @@ using System.Numerics;
 namespace EnumSet;
 
 /*
+Implementation notes
+====================
+
 Enum values are stored in a compact way as flags of a bit field backed by a uint.
 Each enum value is used as a bit index, like in the following example:
 
@@ -47,13 +50,13 @@ enum Example { A, B, C, D, E = 13, F = 21, G }
 
 Where the corresponding bit is '1' the enum value is present in the set.
 
-For example, when Flags is 1011b (that is 0x0c or 11), the set contains elements D, B and A.
+For example, when Flags is 1011b (that is 0x0b or 11), the set contains elements D, B and A.
 
 This code uses several bit manipulation idioms that may be less familiar to people writing mostly high-level code:
   - convert a value to a bit index:  bit = 1 << value
   - set a bit in a bit field:        flags = flags | bit
   - clear a bit in a bit field:      flags = flags & ~bit
-  - test if a bit is set:            flags & bit != 0
+  - test whether a bit is set:       flags & bit != 0
 */
 
 /// <summary>Immutable, efficient IReadOnlySet for enum values with the memory footprint of 32-bit integer</summary>

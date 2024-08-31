@@ -1,4 +1,4 @@
-# EnumSet - Immutable, efficient, small IReadOnlySet for C# enums
+# EnumSet - Immutable, efficient, small, equatable IReadOnlySet for C# enums
 
 [![NuGet](https://img.shields.io/nuget/v/EnumSet.svg)](https://www.nuget.org/packages/EnumSet)
 
@@ -98,7 +98,7 @@ public static class EnumSet
 
 Permissive, [2-clause BSD style](https://opensource.org/licenses/BSD-2-Clause)
 
-EnumSet - Immutable, efficient, small IReadOnlySet for C# enums
+EnumSet - Immutable, efficient, small, equatable IReadOnlySet for C# enums
 
 Copyright 2024 Salvatore ISAJA. All rights reserved.
 
