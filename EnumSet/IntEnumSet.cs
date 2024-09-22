@@ -62,7 +62,7 @@ This code uses several bit manipulation idioms that may be less familiar to peop
 /// <summary>Immutable, efficient IReadOnlySet for enum values with the memory footprint of 32-bit integer</summary>
 /// <typeparam name="T">Enum type to store in the set</typeparam>
 /// <param name="Flags">Internal representation of enum values stored in the set</param>
-public readonly record struct EnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
+public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
 {
     /// Returns the number elements in this EnumSet
     public int Count => BitOperations.PopCount(Flags);
@@ -70,60 +70,60 @@ public readonly record struct EnumSet<T>(uint Flags) : IReadOnlySet<T> where T :
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// Returns an enumerator for this EnumSet
-    public IEnumerator<T> GetEnumerator() => new EnumSetEnumerator<T>(this);
+    public IEnumerator<T> GetEnumerator() => new IntEnumSetEnumerator<T>(this);
 
     /// Returns a string representation for this EnumSet
     public override string ToString() =>
-        $"EnumSet.Of({string.Join(", ", this.Select(e => e.ToString()))})";
+        $"IntEnumSet.Of({string.Join(", ", this.Select(e => e.ToString()))})";
 
     /// Returns true if this EnumSet contains the specified value
-    public bool Contains(T value) => (Flags & EnumSet.ToFlag(value)) != 0;
+    public bool Contains(T item) => (Flags & IntEnumSet.ToFlag(item)) != 0;
 
     /// Returns true if this EnumSet is a strict subset of the other enumerable
     public bool IsProperSubsetOf(IEnumerable<T> other)
     {
-        if (other is not EnumSet<T> otherEnumSet)
-            otherEnumSet = EnumSet.Of(other);
+        if (other is not IntEnumSet<T> otherEnumSet)
+            otherEnumSet = IntEnumSet.Of(other);
         return Flags != otherEnumSet.Flags && (Flags | otherEnumSet.Flags) == otherEnumSet.Flags;
     }
 
     /// Returns true if this EnumSet is a strict superset of the other enumerable
     public bool IsProperSupersetOf(IEnumerable<T> other)
     {
-        if (other is not EnumSet<T> otherEnumSet)
-            otherEnumSet = EnumSet.Of(other);
+        if (other is not IntEnumSet<T> otherEnumSet)
+            otherEnumSet = IntEnumSet.Of(other);
         return Flags != otherEnumSet.Flags && (Flags | otherEnumSet.Flags) == Flags;
     }
 
     /// Returns true if this EnumSet is a subset of the other enumerable
     public bool IsSubsetOf(IEnumerable<T> other)
     {
-        if (other is not EnumSet<T> otherEnumSet)
-            otherEnumSet = EnumSet.Of(other);
+        if (other is not IntEnumSet<T> otherEnumSet)
+            otherEnumSet = IntEnumSet.Of(other);
         return (Flags | otherEnumSet.Flags) == otherEnumSet.Flags;
     }
 
     /// Returns true if this EnumSet is a superset of the other enumerable
     public bool IsSupersetOf(IEnumerable<T> other)
     {
-        if (other is not EnumSet<T> otherEnumSet)
-            otherEnumSet = EnumSet.Of(other);
+        if (other is not IntEnumSet<T> otherEnumSet)
+            otherEnumSet = IntEnumSet.Of(other);
         return (Flags | otherEnumSet.Flags) == Flags;
     }
 
     /// Return true if this EnumSet overlaps with the other enumerable
     public bool Overlaps(IEnumerable<T> other)
     {
-        if (other is not EnumSet<T> otherEnumSet)
-            otherEnumSet = EnumSet.Of(other);
+        if (other is not IntEnumSet<T> otherEnumSet)
+            otherEnumSet = IntEnumSet.Of(other);
         return (Flags & otherEnumSet.Flags) != 0u;
     }
 
     /// Return true if this EnumSet contains the same elements of the other enumerable
     public bool SetEquals(IEnumerable<T> other)
     {
-        if (other is not EnumSet<T> otherEnumSet)
-            otherEnumSet = EnumSet.Of(other);
+        if (other is not IntEnumSet<T> otherEnumSet)
+            otherEnumSet = IntEnumSet.Of(other);
         return Flags == otherEnumSet.Flags;
     }
 }

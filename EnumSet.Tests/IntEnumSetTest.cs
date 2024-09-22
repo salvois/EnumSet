@@ -32,7 +32,7 @@ using NUnit.Framework;
 namespace EnumSet.Tests;
 
 [TestFixture]
-public static class EnumSetTest
+public static class IntEnumSetTest
 {
     public enum Color
     {
@@ -40,246 +40,246 @@ public static class EnumSetTest
         Green = 1,
         Blue = 2,
         TooSmall = -1,
-        TooBig = EnumSet.MaxValue + 1
+        TooBig = IntEnumSet.MaxValue + 1
     }
 
     [Test]
     public static void Flags() =>
-        EnumSet.Of(Color.Red, Color.Blue).Flags
+        IntEnumSet.Of(Color.Red, Color.Blue).Flags
             .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
 
     [Test]
     public static void FromFlags() =>
-        new EnumSet<Color>((1 << (int)Color.Red) | (1 << (int)Color.Blue)) // that is 101b = 5
-            .Should().Equal(EnumSet.Of(Color.Red, Color.Blue));
+        new IntEnumSet<Color>((1 << (int)Color.Red) | (1 << (int)Color.Blue)) // that is 101b = 5
+            .Should().Equal(IntEnumSet.Of(Color.Red, Color.Blue));
 
     [Test]
     public static void Of_Single() =>
-        EnumSet.Of(Color.Blue).Flags
+        IntEnumSet.Of(Color.Blue).Flags
             .Should().Be(1 << (int)Color.Blue); // that is 10b = 2
 
     [Test]
     public static void Of_Params() =>
-        EnumSet.Of(Color.Red, Color.Blue).Flags
+        IntEnumSet.Of(Color.Red, Color.Blue).Flags
             .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
 
     [Test]
     public static void Of_Enumerable() =>
-        EnumSet.Of(Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue)).Flags
+        IntEnumSet.Of(Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue)).Flags
             .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
 
     [Test]
-    public static void ToEnumSet() =>
-        Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue).ToEnumSet().Flags
+    public static void ToIntEnumSet() =>
+        Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue).ToIntEnumSet().Flags
             .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
 
     [TestCase(Color.TooSmall)]
     [TestCase(Color.TooBig)]
     public static void Of_OutOfRange(Color color)
     {
-        var act = () => EnumSet.Of(color);
+        var act = () => IntEnumSet.Of(color);
         act.Should().Throw<ArgumentOutOfRangeException>();
     }
 
     [Test]
     public static void Any_Empty() =>
-        EnumSet.Empty<Color>().Any().Should().BeFalse();
+        IntEnumSet.Empty<Color>().Any().Should().BeFalse();
 
     [Test]
     public static void Any_NotEmpty() =>
-        EnumSet.Of(Color.Red, Color.Green).Any().Should().BeTrue();
+        IntEnumSet.Of(Color.Red, Color.Green).Any().Should().BeTrue();
 
     [Test]
     public static void Contains_Containing() =>
-        EnumSet.Of(Color.Red).Contains(Color.Red).Should().BeTrue();
+        IntEnumSet.Of(Color.Red).Contains(Color.Red).Should().BeTrue();
 
     [Test]
     public static void Contains_NotContaining() =>
-        EnumSet.Of(Color.Red).Contains(Color.Green).Should().BeFalse();
+        IntEnumSet.Of(Color.Red).Contains(Color.Green).Should().BeFalse();
 
     [Test]
     public static void Count() =>
-        EnumSet.Of(Color.Red, Color.Blue).Count.Should().Be(2);
+        IntEnumSet.Of(Color.Red, Color.Blue).Count.Should().Be(2);
 
     [Test]
     public static void Equals_Equal() =>
-        EnumSet.Of(Color.Red, Color.Green)
-            .Equals(EnumSet.Of(Color.Green, Color.Red))
+        IntEnumSet.Of(Color.Red, Color.Green)
+            .Equals(IntEnumSet.Of(Color.Green, Color.Red))
             .Should().BeTrue();
 
     [Test]
     public static void Equals_NotEqual() =>
-        EnumSet.Of(Color.Red, Color.Blue)
-            .Equals(EnumSet.Of(Color.Red, Color.Green))
+        IntEnumSet.Of(Color.Red, Color.Blue)
+            .Equals(IntEnumSet.Of(Color.Red, Color.Green))
             .Should().BeFalse();
 
     [Test]
     public static void Enumerate() =>
-        EnumSet.Of(Color.Red, Color.Blue)
+        IntEnumSet.Of(Color.Red, Color.Blue)
             .Should().BeEquivalentTo(new[] { Color.Red, Color.Blue });
 
     [Test]
     public static void HashCode() =>
-        EnumSet.Of(Color.Red, Color.Green).GetHashCode()
-            .Should().Be(EnumSet.Of(Color.Red, Color.Green).GetHashCode());
+        IntEnumSet.Of(Color.Red, Color.Green).GetHashCode()
+            .Should().Be(IntEnumSet.Of(Color.Red, Color.Green).GetHashCode());
 
     [Test]
     public static void StringRepresentation() =>
-        EnumSet.Of(Color.Red, Color.Blue).ToString()
-            .Should().Be("EnumSet.Of(Red, Blue)");
+        IntEnumSet.Of(Color.Red, Color.Blue).ToString()
+            .Should().Be("IntEnumSet.Of(Red, Blue)");
 
     [Test]
     public static void Intersect_WithEnumerable() =>
-        EnumSet.Of(Color.Red, Color.Blue).Intersect(new[] { Color.Green, Color.Blue })
-            .Should().Equal(EnumSet.Of(Color.Blue));
+        IntEnumSet.Of(Color.Red, Color.Blue).Intersect(new[] { Color.Green, Color.Blue })
+            .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
     public static void Intersect_WithEnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue).Intersect(EnumSet.Of(Color.Green, Color.Blue))
-            .Should().Equal(EnumSet.Of(Color.Blue));
+        IntEnumSet.Of(Color.Red, Color.Blue).Intersect(IntEnumSet.Of(Color.Green, Color.Blue))
+            .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
     public static void Remove_One() =>
-        EnumSet.Of(Color.Red, Color.Blue).Remove(Color.Red)
-            .Should().Equal(EnumSet.Of(Color.Blue));
+        IntEnumSet.Of(Color.Red, Color.Blue).Remove(Color.Red)
+            .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
     public static void Remove_Enumerable() =>
-        EnumSet.Of(Color.Red, Color.Green, Color.Blue).Remove(new[] { Color.Red, Color.Green })
-            .Should().Equal(EnumSet.Of(Color.Blue));
+        IntEnumSet.Of(Color.Red, Color.Green, Color.Blue).Remove(new[] { Color.Red, Color.Green })
+            .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
     public static void Remove_EnumSet() =>
-        EnumSet.Of(Color.Red, Color.Green, Color.Blue).Remove(EnumSet.Of(Color.Red, Color.Green))
-            .Should().Equal(EnumSet.Of(Color.Blue));
+        IntEnumSet.Of(Color.Red, Color.Green, Color.Blue).Remove(IntEnumSet.Of(Color.Red, Color.Green))
+            .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
     public static void Union_One() =>
-        EnumSet.Of(Color.Red).Union(Color.Blue)
-            .Should().Equal(EnumSet.Of(Color.Red, Color.Blue));
+        IntEnumSet.Of(Color.Red).Union(Color.Blue)
+            .Should().Equal(IntEnumSet.Of(Color.Red, Color.Blue));
 
     [Test]
     public static void Union_WithEnumerable() =>
-        EnumSet.Of(Color.Red, Color.Blue).Union(new[] { Color.Green, Color.Blue })
-            .Should().Equal(EnumSet.Of(Color.Green, Color.Red, Color.Blue));
+        IntEnumSet.Of(Color.Red, Color.Blue).Union(new[] { Color.Green, Color.Blue })
+            .Should().Equal(IntEnumSet.Of(Color.Green, Color.Red, Color.Blue));
 
     [Test]
     public static void Union_WithEnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue).Union(EnumSet.Of(Color.Green, Color.Blue))
-            .Should().Equal(EnumSet.Of(Color.Green, Color.Red, Color.Blue));
+        IntEnumSet.Of(Color.Red, Color.Blue).Union(IntEnumSet.Of(Color.Green, Color.Blue))
+            .Should().Equal(IntEnumSet.Of(Color.Green, Color.Red, Color.Blue));
 
     [Test]
     public static void IsProperSubsetOf_Subset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsProperSubsetOf(new[] { Color.Red, Color.Red, Color.Blue, Color.Green })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsProperSubsetOf(new[] { Color.Red, Color.Red, Color.Blue, Color.Green })
             .Should().BeTrue();
 
     [Test]
     public static void IsProperSubsetOf_EnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsProperSubsetOf(EnumSet.Of(Color.Red, Color.Blue, Color.Green))
+        IntEnumSet.Of(Color.Red, Color.Blue).IsProperSubsetOf(IntEnumSet.Of(Color.Red, Color.Blue, Color.Green))
             .Should().BeTrue();
 
     [Test]
     public static void IsProperSubsetOf_NonStrictSubset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsProperSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsProperSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeFalse();
 
     [Test]
     public static void IsProperSubsetOf_NotSubset() =>
-        EnumSet.Of(Color.Red, Color.Green).IsProperSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Green).IsProperSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeFalse();
 
     [Test]
     public static void IsProperSupersetOf_Superset() =>
-        EnumSet.Of(Color.Red, Color.Blue, Color.Green).IsProperSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue, Color.Green).IsProperSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeTrue();
 
     [Test]
     public static void IsProperSupersetOf_EnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue, Color.Green).IsProperSupersetOf(EnumSet.Of(Color.Red, Color.Blue))
+        IntEnumSet.Of(Color.Red, Color.Blue, Color.Green).IsProperSupersetOf(IntEnumSet.Of(Color.Red, Color.Blue))
             .Should().BeTrue();
 
     [Test]
     public static void IsProperSupersetOf_NonStrictSuperset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsProperSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsProperSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeFalse();
 
     [Test]
     public static void IsProperSupersetOf_NotSuperset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsProperSupersetOf(new[] { Color.Red, Color.Green })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsProperSupersetOf(new[] { Color.Red, Color.Green })
             .Should().BeFalse();
 
     [Test]
     public static void IsSubsetOf_Subset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsSubsetOf(new[] { Color.Red, Color.Red, Color.Blue, Color.Green })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsSubsetOf(new[] { Color.Red, Color.Red, Color.Blue, Color.Green })
             .Should().BeTrue();
 
     [Test]
     public static void IsSubsetOf_EnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsSubsetOf(EnumSet.Of(Color.Red, Color.Blue, Color.Green))
+        IntEnumSet.Of(Color.Red, Color.Blue).IsSubsetOf(IntEnumSet.Of(Color.Red, Color.Blue, Color.Green))
             .Should().BeTrue();
 
     [Test]
     public static void IsSubsetOf_NonStrictSubset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeTrue();
 
     [Test]
     public static void IsSubsetOf_NotSubset() =>
-        EnumSet.Of(Color.Red, Color.Green).IsSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Green).IsSubsetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeFalse();
 
     [Test]
     public static void IsSupersetOf_Superset() =>
-        EnumSet.Of(Color.Red, Color.Blue, Color.Green).IsSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue, Color.Green).IsSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeTrue();
 
     [Test]
     public static void IsSupersetOf_EnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue, Color.Green).IsSupersetOf(EnumSet.Of(Color.Red, Color.Blue))
+        IntEnumSet.Of(Color.Red, Color.Blue, Color.Green).IsSupersetOf(IntEnumSet.Of(Color.Red, Color.Blue))
             .Should().BeTrue();
 
     [Test]
     public static void IsSupersetOf_NonStrictSuperset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsSupersetOf(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeTrue();
 
     [Test]
     public static void IsSupersetOf_NotSuperset() =>
-        EnumSet.Of(Color.Red, Color.Blue).IsSupersetOf(new[] { Color.Red, Color.Green })
+        IntEnumSet.Of(Color.Red, Color.Blue).IsSupersetOf(new[] { Color.Red, Color.Green })
             .Should().BeFalse();
 
     [Test]
     public static void Overlaps_Overlapping() =>
-        EnumSet.Of(Color.Red, Color.Blue).Overlaps(new[] { Color.Red, Color.Green })
+        IntEnumSet.Of(Color.Red, Color.Blue).Overlaps(new[] { Color.Red, Color.Green })
             .Should().BeTrue();
 
     [Test]
     public static void Overlaps_EnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue).Overlaps(EnumSet.Of(Color.Red, Color.Green))
+        IntEnumSet.Of(Color.Red, Color.Blue).Overlaps(IntEnumSet.Of(Color.Red, Color.Green))
             .Should().BeTrue();
 
     [Test]
     public static void Overlaps_NotOverlapping() =>
-        EnumSet.Of(Color.Blue).Overlaps(new[] { Color.Red, Color.Green })
+        IntEnumSet.Of(Color.Blue).Overlaps(new[] { Color.Red, Color.Green })
             .Should().BeFalse();
 
     [Test]
     public static void SetEquals_Equal() =>
-        EnumSet.Of(Color.Red, Color.Blue).SetEquals(new[] { Color.Red, Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue).SetEquals(new[] { Color.Red, Color.Red, Color.Blue })
             .Should().BeTrue();
 
     [Test]
     public static void SetEquals_EnumSet() =>
-        EnumSet.Of(Color.Red, Color.Blue).SetEquals(EnumSet.Of(Color.Red, Color.Blue))
+        IntEnumSet.Of(Color.Red, Color.Blue).SetEquals(IntEnumSet.Of(Color.Red, Color.Blue))
             .Should().BeTrue();
 
     [Test]
     public static void SetEquals_Smaller() =>
-        EnumSet.Of(Color.Red, Color.Blue).SetEquals(new[] { Color.Red, Color.Green, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Blue).SetEquals(new[] { Color.Red, Color.Green, Color.Blue })
             .Should().BeFalse();
 
     [Test]
     public static void SetEquals_Larger() =>
-        EnumSet.Of(Color.Red, Color.Green, Color.Blue).SetEquals(new[] { Color.Red, Color.Blue })
+        IntEnumSet.Of(Color.Red, Color.Green, Color.Blue).SetEquals(new[] { Color.Red, Color.Blue })
             .Should().BeFalse();
 }

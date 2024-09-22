@@ -30,13 +30,13 @@ using System.Collections.Generic;
 
 namespace EnumSet;
 
-internal class EnumSetEnumerator<T> : IEnumerator<T> where T : Enum
+internal class IntEnumSetEnumerator<T> : IEnumerator<T> where T : Enum
 {
-    private readonly EnumSet<T> _enumSet;
+    private readonly IntEnumSet<T> _enumSet;
     private uint _flags;
     private int _index;
 
-    public EnumSetEnumerator(EnumSet<T> enumSet)
+    public IntEnumSetEnumerator(IntEnumSet<T> enumSet)
     {
         _enumSet = enumSet;
         _flags = _enumSet.Flags;
