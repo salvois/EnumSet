@@ -64,6 +64,9 @@ This code uses several bit manipulation idioms that may be less familiar to peop
 /// <param name="Flags">Internal representation of enum values stored in the set</param>
 public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
 {
+    /// Implicitly creates an empty EnumSet from a typeless EmptyEnumSet
+    public static implicit operator IntEnumSet<T>(EmptyEnumSet _) => new(0);
+
     /// Returns the number elements in this EnumSet
     public int Count => BitOperations.PopCount(Flags);
 

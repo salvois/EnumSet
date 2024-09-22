@@ -30,14 +30,14 @@ using System.Linq;
 
 namespace EnumSet;
 
-/// Provides static methods to work with IntEnumSet<T>
+/// Provides static methods to work with IntEnumSet&lt;T&gt;
 public static class IntEnumSet
 {
     /// The maximum enum value that can be saved in an EnumSet
     public const int MaxValue = sizeof(int) * 8 - 1;
 
-    /// Returns an EnumSet containing no elements
-    public static IntEnumSet<T> Empty<T>() where T : Enum => new(0u);
+    /// Singleton EnumSet containing no elements
+    public static readonly EmptyEnumSet Empty = EmptyEnumSet.Empty;
 
     /// Creates an EnumSet from the specified value
     public static IntEnumSet<T> Of<T>(T value) where T : Enum =>
@@ -70,11 +70,11 @@ public static class IntEnumSet
     }
 
     /// Returns a new EnumSet removing the specified value from this EnumSet
-    public static IntEnumSet<T> Remove<T>(this IntEnumSet<T> enumSet, T value) where T : Enum =>
+    public static IntEnumSet<T> Except<T>(this IntEnumSet<T> enumSet, T value) where T : Enum =>
         new(enumSet.Flags & ~ToFlag(value));
 
     /// Returns a new EnumSet removing the values of the other enumerable from this EnumSet
-    public static IntEnumSet<T> Remove<T>(this IntEnumSet<T> enumSet, IEnumerable<T> other) where T : Enum
+    public static IntEnumSet<T> Except<T>(this IntEnumSet<T> enumSet, IEnumerable<T> other) where T : Enum
     {
         if (other is not IntEnumSet<T> otherEnumSet)
             otherEnumSet = Of(other);

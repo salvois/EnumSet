@@ -82,8 +82,12 @@ public static class IntEnumSetTest
     }
 
     [Test]
+    public static void Implicit_Empty() =>
+        ((IntEnumSet<Color>)IntEnumSet.Empty).Any().Should().BeFalse();
+
+    [Test]
     public static void Any_Empty() =>
-        IntEnumSet.Empty<Color>().Any().Should().BeFalse();
+        IntEnumSet.Of<Color>().Any().Should().BeFalse();
 
     [Test]
     public static void Any_NotEmpty() =>
@@ -139,18 +143,18 @@ public static class IntEnumSetTest
             .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
-    public static void Remove_One() =>
-        IntEnumSet.Of(Color.Red, Color.Blue).Remove(Color.Red)
+    public static void Except_One() =>
+        IntEnumSet.Of(Color.Red, Color.Blue).Except(Color.Red)
             .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
-    public static void Remove_Enumerable() =>
-        IntEnumSet.Of(Color.Red, Color.Green, Color.Blue).Remove(new[] { Color.Red, Color.Green })
+    public static void Except_Enumerable() =>
+        IntEnumSet.Of(Color.Red, Color.Green, Color.Blue).Except(new[] { Color.Red, Color.Green })
             .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
-    public static void Remove_EnumSet() =>
-        IntEnumSet.Of(Color.Red, Color.Green, Color.Blue).Remove(IntEnumSet.Of(Color.Red, Color.Green))
+    public static void Except_EnumSet() =>
+        IntEnumSet.Of(Color.Red, Color.Green, Color.Blue).Except(IntEnumSet.Of(Color.Red, Color.Green))
             .Should().Equal(IntEnumSet.Of(Color.Blue));
 
     [Test]
