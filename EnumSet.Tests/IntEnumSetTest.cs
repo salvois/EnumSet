@@ -25,6 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -40,7 +41,7 @@ public static class IntEnumSetTest
         Green = 1,
         Blue = 2,
         TooSmall = -1,
-        TooBig = IntEnumSet.MaxValue + 1
+        TooBig = IntEnumSet<Color>.MaxValue + 1
     }
 
     [Test]
@@ -66,6 +67,11 @@ public static class IntEnumSetTest
     [Test]
     public static void Of_Enumerable() =>
         IntEnumSet.Of(Enumerable.Empty<Color>().Append(Color.Red).Append(Color.Blue)).Flags
+            .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
+
+    [Test]
+    public static void Of_ReadOnlyList() =>
+        IntEnumSet.Of((IReadOnlyList<Color>)new[] { Color.Red, Color.Blue }).Flags
             .Should().Be((1 << (int)Color.Red) | (1 << (int)Color.Blue)); // that is 101b = 5
 
     [Test]

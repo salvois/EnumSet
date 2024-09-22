@@ -4,22 +4,30 @@
 
 This little library provides an implementation of IReadOnlySet tailored for enums.
 
-Inspired by the EnumSet collection of Java, the EnumSet provided by this library is immutable and is backed by a plain unsigned integer where enum values are stored as flags, in order be easy on the garbage collector and be very efficient in space and time, while exposing the familiar interface for C# set collections, hiding the complexity of dealing with flags.
+Inspired by the EnumSet collection of Java, the `IntEnumSet` provided by this library is immutable and is backed by a plain unsigned integer where enum values are stored as flags, in order be easy on the garbage collector and be very efficient in space and time, while exposing the familiar interface for C# set collections, hiding the complexity of dealing with flags.
 
 This is especially well suited where a large number of set of enums must be created, such as a bulk of data with some validation flags attached.
 
 
-## EnumSet&lt;T&gt; collection
+## IntEnumSet&lt;T&gt; collection
 
-The actual collectin is provided by the `EnumSet<T>` class, which implements `IReadOnlySet<T>` standard interface.
+The actual collection is provided by the `IntEnumSet<T>` readonly record struct, which implements the `IReadOnlySet<T>` standard interface.
 
-It is a readonly record struct containing a single `uint Flags` property, which represents the combination of enum values stored in the collection as flags, and is not meant to be used directly. The `Flags` property is public to ease testing and get equality for free thanks to records.
+It contains a single `uint Flags` property, which represents the combination of enum values stored in the collection as flags, and is not meant to be used directly. The `Flags` property is public to ease testing and get equality for free thanks to records.
 
 **Note:** since the actual storage is a bit field containing 32 bits (the `uint Flags` property), you can store at most 32 different enum values, ranging from 0 to 31. If you try to add a value outside this range, an `ArgumentOutOfRangeException` is thrown.
 
 ```csharp
-public readonly record struct EnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
+namespace EnumSet;
+
+public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
 {
+    /// Named constructors
+    public static IntEnumSet<T> Of(T value);
+    public static IntEnumSet<T> Of(params T[] values);
+    public static IntEnumSet<T> Of(IEnumerable<T> values);
+    public static IntEnumSet<T> Of(IReadOnlyList<T> list);
+
     /// Returns the number elements in this EnumSet
     public int Count;
 
@@ -49,50 +57,48 @@ public readonly record struct EnumSet<T>(uint Flags) : IReadOnlySet<T> where T :
 
     /// Return true if this EnumSet contains the same elements of the other enumerable
     public bool SetEquals(IEnumerable<T> other);
-}
-```
-
-## Utility functions to work with EnumSets
-
-The `EnumSet` static class provides static methods to work with `EnumSet<T>` collections.
-
-```csharp
-public static class EnumSet
-{
-    /// Returns an EnumSet containing no elements
-    public static EnumSet<T> Empty<T>() where T : Enum;
-
-    /// Creates an EnumSet from the specified value
-    public static EnumSet<T> Of<T>(T value) where T : Enum;
-
-    /// Creates an EnumSet from the specified values
-    public static EnumSet<T> Of<T>(params T[] values) where T : Enum;
-
-    /// Creates an EnumSet from the specified IEnumerable
-    public static EnumSet<T> Of<T>(IEnumerable<T> values) where T : Enum;
-
-    /// Creates an EnumSet from the specified IEnumerable, fluently
-    public static EnumSet<T> ToEnumSet<T>(this IEnumerable<T> values) where T : Enum;
 
     /// Returns true if this EnumSet contains any value
-    public static bool Any<T>(this EnumSet<T> enumSet) where T : Enum;
+    public bool Any();
 
-    /// Returns a new EnumSet as the intersection of this EnumSet with the other enumerable
-    public static EnumSet<T> Intersect<T>(this EnumSet<T> enumSet, IEnumerable<T> other) where T : Enum;
+    /// Returns a new EnumSet as the intersection of this EnumSet with the other
+    public IntEnumSet<T> Intersect(IntEnumSet<T> other);
+    public IntEnumSet<T> Intersect(IEnumerable<T> other);
 
-    /// Returns a new EnumSet removing the specified value from this EnumSet
-    public static EnumSet<T> Remove<T>(this EnumSet<T> enumSet, T value) where T : Enum;
+    /// Returns a new EnumSet removing other from this EnumSet
+    public IntEnumSet<T> Except(T other);
+    public IntEnumSet<T> Except(IntEnumSet<T> other);
+    public IntEnumSet<T> Except(IEnumerable<T> other);
 
-    /// Returns a new EnumSet removing the values of the other enumerable from this EnumSet
-    public static EnumSet<T> Remove<T>(this EnumSet<T> enumSet, IEnumerable<T> other) where T : Enum;
-
-    /// Returns a new EnumSet as the union of this EnumSet with the specified value
-    public static EnumSet<T> Union<T>(this EnumSet<T> enumSet, T value) where T : Enum;
-
-    /// Returns a new EnumSet as the union of this EnumSet with the other enumerable
-    public static EnumSet<T> Union<T>(this EnumSet<T> enumSet, IEnumerable<T> other) where T : Enum;
+    /// Returns a new EnumSet as the union of this EnumSet with other
+    public IntEnumSet<T> Union(T value);
+    public IntEnumSet<T> Union(IntEnumSet<T> other);
+    public IntEnumSet<T> Union(IEnumerable<T> other);
 }
 ```
+
+The `IntEnumSet` static class provides functionality to simplify working with `IntEnumSet<T>` collections.
+
+```csharp
+namespace EnumSet;
+
+public static class IntEnumSet
+{
+    /// Singleton non-generic EnumSet containing no elements
+    public static readonly EmptyEnumSet Empty = EmptyEnumSet.Empty;
+
+    /// Named constructors with type inference
+    public static IntEnumSet<T> Of<T>(T value) where T : Enum;
+    public static IntEnumSet<T> Of<T>(params T[] values) where T : Enum;
+    public static IntEnumSet<T> Of<T>(IEnumerable<T> values) where T : Enum;
+    public static IntEnumSet<T> Of<T>(IReadOnlyList<T> values) where T : Enum;
+
+    /// Creates an EnumSet from the specified IEnumerable, fluently
+    public static IntEnumSet<T> ToIntEnumSet<T>(this IEnumerable<T> values) where T : Enum;
+}
+```
+The `EmptyEnumSet` non-generic type, which is implicitly convertible to any `IntEnumSet<T>`, provides for a simple way to pass empty enum sets inferring the type. Just use `IntEnumSet.Empty` to specify an enum set containing no elements.
+
 
 ## License
 
