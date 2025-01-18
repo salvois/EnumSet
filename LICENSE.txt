@@ -1,5 +1,5 @@
 EnumSet - Immutable, efficient, small IReadOnlySet for C# enums
-Copyright 2024  Salvatore ISAJA
+Copyright 2024-2025  Salvatore ISAJA
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 

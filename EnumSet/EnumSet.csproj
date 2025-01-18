@@ -6,7 +6,7 @@
 		<Version>0.0.2</Version>
 		<Authors>Salvo Isaja</Authors>
 		<Company>Salvo Isaja</Company>
-		<Copyright>Copyright 2024  Salvatore Isaja</Copyright>
+		<Copyright>Copyright 2024-2025  Salvatore Isaja</Copyright>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageProjectUrl>https://github.com/salvois/EnumSet</PackageProjectUrl>

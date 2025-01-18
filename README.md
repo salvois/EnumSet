@@ -106,7 +106,7 @@ Permissive, [2-clause BSD style](https://opensource.org/licenses/BSD-2-Clause)
 
 EnumSet - Immutable, efficient, small, equatable IReadOnlySet for C# enums
 
-Copyright 2024 Salvatore ISAJA. All rights reserved.
+Copyright 2024-2025 Salvatore ISAJA. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
