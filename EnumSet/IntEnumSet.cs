@@ -91,9 +91,11 @@ public static class IntEnumSet
 /// <param name="Flags">Internal representation of enum values stored in the set</param>
 public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
 {
+    /// Singleton generic EnumSet containing no elements
+    public static readonly IntEnumSet<T> Empty = new(0);
+
     /// Implicitly creates an empty EnumSet from a typeless EmptyEnumSet
-    public static implicit operator IntEnumSet<T>(EmptyEnumSet _) =>
-        new(0);
+    public static implicit operator IntEnumSet<T>(EmptyEnumSet _) => Empty;
 
     /// The maximum enum value that can be saved in an IntEnumSet
     public const int MaxValue = sizeof(uint) * 8 - 1;
@@ -194,7 +196,7 @@ public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where 
         Flags != 0;
 
     /// Returns a new EnumSet as the intersection of this EnumSet with the other EnumSet
-    public IntEnumSet<T> Intersect(IntEnumSet<T> other) => 
+    public IntEnumSet<T> Intersect(IntEnumSet<T> other) =>
         new(Flags & other.Flags);
 
     /// Returns a new EnumSet as the intersection of this EnumSet with the other enumerable
@@ -210,7 +212,7 @@ public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where 
         new(Flags & ~ToFlag(other));
 
     /// Returns a new EnumSet removing the values of the other EnumSet from this EnumSet
-    public IntEnumSet<T> Except(IntEnumSet<T> other) => 
+    public IntEnumSet<T> Except(IntEnumSet<T> other) =>
         new(Flags & ~other.Flags);
 
     /// Returns a new EnumSet removing the values of the other enumerable from this EnumSet
@@ -226,7 +228,7 @@ public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where 
         new(Flags | ToFlag(other));
 
     /// Returns a new EnumSet as the union of this EnumSet with the other EnumSet
-    public IntEnumSet<T> Union(IntEnumSet<T> other) => 
+    public IntEnumSet<T> Union(IntEnumSet<T> other) =>
         new(Flags | other.Flags);
 
     /// Returns a new EnumSet as the union of this EnumSet with the other enumerable

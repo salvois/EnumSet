@@ -22,6 +22,12 @@ namespace EnumSet;
 
 public readonly record struct IntEnumSet<T>(uint Flags) : IReadOnlySet<T> where T : Enum
 {
+    /// Singleton generic EnumSet containing no elements
+    public static readonly IntEnumSet<T> Empty;
+
+    /// The maximum enum value that can be saved in an IntEnumSet
+    public const int MaxValue;
+
     /// Named constructors
     public static IntEnumSet<T> Of(T value);
     public static IntEnumSet<T> Of(params T[] values);
@@ -85,7 +91,7 @@ namespace EnumSet;
 public static class IntEnumSet
 {
     /// Singleton non-generic EnumSet containing no elements
-    public static readonly EmptyEnumSet Empty = EmptyEnumSet.Empty;
+    public static readonly EmptyEnumSet Empty;
 
     /// Named constructors with type inference
     public static IntEnumSet<T> Of<T>(T value) where T : Enum;

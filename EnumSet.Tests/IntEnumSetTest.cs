@@ -55,6 +55,11 @@ public static class IntEnumSetTest
             .ShouldBe(IntEnumSet.Of(Color.Red, Color.Blue));
 
     [Test]
+    public static void Empty() =>
+        IntEnumSet<Color>.Empty.Flags
+            .ShouldBe(0u);
+
+    [Test]
     public static void Of_Single() =>
         IntEnumSet.Of(Color.Blue).Flags
             .ShouldBe(1u << (int)Color.Blue); // that is 10b = 2

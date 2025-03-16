@@ -26,7 +26,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 namespace EnumSet;
 
-/// Type representing an empty EnumSet that can be implicitly assigned to any EnumSet of ant type
+/// Type representing an empty EnumSet that can be implicitly assigned to any EnumSet of any type
 public record EmptyEnumSet
 {
     private EmptyEnumSet() { }
